@@ -2,6 +2,9 @@ const express = require("express");
 
 let app = express();
 
+//Middle ware for accepting data
+app.use(express.json())
+
 app.get("/", (req, res) => {
     res.send("Ok got it")
 })
@@ -248,6 +251,13 @@ app.get("/products", (req, res) => {
             }
         }
     ])
+})
+
+//create
+app.post("/create", (req, res) => {
+
+    console.log(req.body)
+    res.send("Ok post")
 })
 
 app.listen(3000, () => {
