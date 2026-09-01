@@ -1,3 +1,4 @@
+//Api ke logics hold krta hai
 const notesModel = require("../models/notes.model");
 
 const createNotesController = async (req, res) => {
@@ -32,4 +33,24 @@ const getAllNotesController = async (req, res) => {
   }
 };
 
-module.exports = { createNotesController, getAllNotesController };
+const getSingleNotesController = async (req, res) => {
+  try {
+    let noteID = req.params.id;
+
+    let note = await notesModel.findById(noteID);
+
+    res.status(200).json({
+      message: "Note fetched succesfully",
+      data: note,
+    });
+    
+  } catch (error) {
+    console.log("errors in single note api", error);
+  }
+};
+
+module.exports = {
+  createNotesController,
+  getAllNotesController,
+  getSingleNotesController,
+};
