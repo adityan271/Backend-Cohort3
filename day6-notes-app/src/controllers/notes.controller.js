@@ -19,5 +19,17 @@ const createNotesController = async (req, res) => {
 
   res.send("Ok chalu hai");
 };
+const getAllNotesController = async (req, res) => {
+  try {
+    const allNotes = await notesModel.find();
 
-module.exports = createNotesController;
+    res.status(200).json({
+      message: "All notes fetched",
+      data: allNotes,
+    });
+  } catch (error) {
+    console.log("error in notes api", error);
+  }
+};
+
+module.exports = { createNotesController, getAllNotesController };
