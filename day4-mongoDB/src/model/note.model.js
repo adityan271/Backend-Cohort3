@@ -1,15 +1,16 @@
 const mongoose = require("mongoose");
 
-const noteSchema = new mongoose.model({
+const notesSchema = new mongoose.Schema({
   title: {
     type: String,
     required: true,
   },
+
   description: {
     type: String,
-    minlength: 10,
+    minlenght: 10,
   },
 });
 
-const NotesModel = Mongoose.model("notes", "noteSchema");
-module.exports = NotesModel;
+const notesModel = mongoose.model("notes", notesSchema);
+module.exports = notesModel;

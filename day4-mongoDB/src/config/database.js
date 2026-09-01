@@ -4,7 +4,7 @@ const { default: mongoose } = require("mongoose");
 const connectDb = async () => {
   try {
     await mongoose.connect(
-      "mongodb+srv://adityanath271_db_user:coho@cohort-cluster.fhlabqb.mongodb.net/",
+      "mongodb+srv://adityanath271_db_user:cohort123456@cohort-cluster.fhlabqb.mongodb.net/",
     );
 
     console.log("MongoDb connected");
