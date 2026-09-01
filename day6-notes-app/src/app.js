@@ -2,6 +2,7 @@ const express = require("express");
 const notesModel = require("./models/notes.model");
 const connectDb = require("./config/db");
 const createNotesController = require("./controllers/notes.controller");
+const notesRoute = require("./routes/notes.route");
 
 const app = express();
 
@@ -13,6 +14,6 @@ app.get("/", (req, res) => {
   res.send("Ok chalu hai");
 });
 
-app.post("/create", createNotesController);
+app.use("/notes", notesRoute);
 
 module.exports = app;
