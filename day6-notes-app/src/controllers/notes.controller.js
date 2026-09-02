@@ -15,7 +15,9 @@ const createNotesController = async (req, res) => {
       data: newNote,
     });
   } catch (error) {
-    console.log("error in api", error);
+    return res.status(500).json({
+      message: "Internal server error",
+    });
   }
 
   res.send("Ok chalu hai");
@@ -29,10 +31,11 @@ const getAllNotesController = async (req, res) => {
       data: allNotes,
     });
   } catch (error) {
-    console.log("error in notes api", error);
+    return res.status(500).json({
+      message: "Internal server error",
+    });
   }
 };
-
 const getSingleNotesController = async (req, res) => {
   try {
     let noteID = req.params.id;
@@ -43,9 +46,29 @@ const getSingleNotesController = async (req, res) => {
       message: "Note fetched succesfully",
       data: note,
     });
-    
   } catch (error) {
-    console.log("errors in single note api", error);
+    return res.status(500).json({
+      message: "Internal server error",
+    });
+  }
+};
+const updateNotesController = async (req, res) => {
+  try {
+    let nodeId = req.params.id;
+    let body = req.body;
+
+    let updatedNote = await notesModel.findByIdAndUpdate(noteID, body, {
+      new: true,
+    });
+
+    return res.status(200).json({
+      message: "Note updated succesfully",
+      data: updatedNote,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: "Internal server error",
+    });
   }
 };
 
@@ -53,4 +76,5 @@ module.exports = {
   createNotesController,
   getAllNotesController,
   getSingleNotesController,
+  updateNotesController,
 };
