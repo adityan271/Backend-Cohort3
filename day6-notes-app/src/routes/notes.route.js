@@ -5,12 +5,12 @@ const {
   getAllNotesController,
   getSingleNotesController,
   updateNotesController,
+  deleteNotesController,
 } = require("../controllers/notes.controller");
 
 const notesModel = require("../models/notes.model");
 
 const router = express.Router();
-
 
 // Create
 router.post("/create", createNotesController);
@@ -24,5 +24,7 @@ router.get("/:id", getSingleNotesController);
 // Update
 router.put("/:id", updateNotesController);
 
+// Delete
+router.delete("/:id", deleteNotesController);
 
 module.exports = router;
