@@ -7,6 +7,9 @@ const App = () => {
     title: "",
     description: "",
   });
+
+  const [updateNoteId, setUpdateNoteId] = useState(null);
+
   const [allNotes, setAllNotes] = useState([]);
   const handleChange = (e) => {
     setFormValues(
@@ -18,16 +21,25 @@ const App = () => {
   const handleSubmit = async (e) => {
     e.preventDefault(); // prevent reloading
 
-    //api call
-    let res = await axios.post(
-      "http://localhost:3000/notes/create",
-      formValues,
-    );
+    if (updateNoteId) {
+      let res = await axios.put(
+        `http://localhost:3000/notes/${updateNoteId}`,
+        formValues,
+      );
+      setUpdateNoteId(null)
+    } else {
+      //api call
+      let res = await axios.post(
+        "http://localhost:3000/notes/create",
+        formValues,
+      );
+    }
 
     setFormValues({
       title: "",
       description: "",
     });
+    getAllNotes();
   };
 
   const getAllNotes = async () => {
@@ -53,6 +65,14 @@ const App = () => {
     }
   };
 
+  let noteForUpdate = (note) => {
+    console.log(note)
+    setUpdateNoteId(note._id)
+    setFormValues({
+      title: note.title,
+      description: note.description,
+    });
+  };
   return (
     <div className="h-screen p-5 flex flex-col gap-10">
       <h1 className="text-3xl">Notes app</h1>
@@ -84,7 +104,12 @@ const App = () => {
 
       <div className="flex gap-4">
         {allNotes.map((val) => (
-          <NoteCard key={val._id} note={val} deleteNote={deleteNote} />
+          <NoteCard
+            key={val._id}
+            note={val}
+            deleteNote={deleteNote}
+            noteForUpdate={noteForUpdate}
+          />
         ))}
       </div>
     </div>

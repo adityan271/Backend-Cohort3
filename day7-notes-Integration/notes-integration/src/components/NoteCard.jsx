@@ -1,6 +1,6 @@
 import React from "react";
 
-const NoteCard = ({ note, deleteNote }) => {
+const NoteCard = ({ note, deleteNote, noteForUpdate }) => {
   return (
     <div className="w-30% border border-white flex flex-col gap-3 p-4 rounded-xl">
       <h1>{note.title}</h1>
@@ -10,7 +10,12 @@ const NoteCard = ({ note, deleteNote }) => {
           : note.description}
       </p>
       <div className="flex justify-between gap-5">
-        <button className="p-2 bg-yellow-600 text-white rounded">Update</button>
+        <button
+          onClick={() => noteForUpdate(note)}
+          className="p-2 bg-yellow-600 text-white rounded"
+        >
+          Update
+        </button>
         <button
           onClick={() => deleteNote(note._id)}
           className="p-2 bg-red-600 text-white rounded"
