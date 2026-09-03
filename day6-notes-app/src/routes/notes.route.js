@@ -8,7 +8,6 @@ const {
   deleteNotesController,
 } = require("../controllers/notes.controller");
 
-const notesModel = require("../models/notes.model");
 
 const router = express.Router();
 
