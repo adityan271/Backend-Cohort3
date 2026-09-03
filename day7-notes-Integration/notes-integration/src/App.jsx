@@ -1,12 +1,13 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
+import NoteCard from "./components/NoteCard";
 
 const App = () => {
   const [formValues, setFormValues] = useState({
     title: "",
     description: "",
   });
-
+  const [allNotes, setAllNotes] = useState([]);
   const handleChange = (e) => {
     setFormValues(
       (
@@ -29,6 +30,19 @@ const App = () => {
     });
   };
 
+  const getAllNotes = async () => {
+    try {
+      let res = await axios.get("http://localhost:3000/notes/allNotes");
+      setAllNotes(res.data.data);
+    } catch (error) {
+      console.log("error in get all notes api", error);
+    }
+  };
+
+  useEffect(() => {
+    getAllNotes();
+  }, []);
+
   return (
     <div className="h-screen p-5 flex flex-col gap-10">
       <h1 className="text-3xl">Notes app</h1>
@@ -44,7 +58,6 @@ const App = () => {
           className="p-2 outline-none text-xl border border-white rounded"
           type="text"
           placeholder="Title"
-          
         />
         <input
           onChange={handleChange}
@@ -54,10 +67,16 @@ const App = () => {
           type="text"
           placeholder="description"
           minLength={20}
-          required 
+          required
         />
         <button className="bg-blue-600 p-2 text-xl rounded">Add Note</button>
       </form>
+
+      <div className="flex gap-4">
+        {allNotes.map((val) => (
+          <NoteCard key={val._id} note={val} />
+        ))}
+      </div>
     </div>
   );
 };
