@@ -43,6 +43,16 @@ const App = () => {
     getAllNotes();
   }, []);
 
+  const deleteNote = async (id) => {
+    try {
+      let res = await axios.delete(`http://localhost:3000/notes/${id}`);
+      console.log(res);
+      getAllNotes();
+    } catch (error) {
+      console.log("Error in delete note api", error);
+    }
+  };
+
   return (
     <div className="h-screen p-5 flex flex-col gap-10">
       <h1 className="text-3xl">Notes app</h1>
@@ -74,7 +84,7 @@ const App = () => {
 
       <div className="flex gap-4">
         {allNotes.map((val) => (
-          <NoteCard key={val._id} note={val} />
+          <NoteCard key={val._id} note={val} deleteNote={deleteNote} />
         ))}
       </div>
     </div>
