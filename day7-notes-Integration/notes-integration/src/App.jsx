@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import axios from "axios";
 
 const App = () => {
   const [formValues, setFormValues] = useState({
@@ -13,9 +14,14 @@ const App = () => {
       ) => ({ ...prev, [e.target.name]: e.target.value }),
     ); // update current data
   };
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log(formValues);
+  const handleSubmit = async (e) => {
+    e.preventDefault(); // prevent reloading
+
+    //api call
+    let res = await axios.post(
+      "http://localhost:3000/notes/create",
+      formValues,
+    );
 
     setFormValues({
       title: "",
@@ -38,6 +44,7 @@ const App = () => {
           className="p-2 outline-none text-xl border border-white rounded"
           type="text"
           placeholder="Title"
+          
         />
         <input
           onChange={handleChange}
@@ -46,6 +53,8 @@ const App = () => {
           className="p-2 outline-none text-xl border border-white rounded"
           type="text"
           placeholder="description"
+          minLength={20}
+          required 
         />
         <button className="bg-blue-600 p-2 text-xl rounded">Add Note</button>
       </form>
