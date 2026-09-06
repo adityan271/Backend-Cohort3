@@ -9,7 +9,7 @@ const App = () => {
   }
   return (
     <div>
-      <form onSubmit={handleSubmit(submitHandler)}>
+      <form  onSubmit={handleSubmit(submitHandler)}>
         <input type="text" placeholder="enter your name" />
         <input type="email" placeholder="enter your email" />
         <input type="file" placeholder="upload your profile pic" />
