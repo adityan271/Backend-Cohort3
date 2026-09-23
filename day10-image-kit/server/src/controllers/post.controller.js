@@ -1,3 +1,10 @@
-import postModel from "../models/post.model";
+import postModel from "../models/post.model.js";
 
-const createPost = async (req, res) => {};
+export const createPost = async (req, res) => {
+
+    const {caption} = req.body
+    const file = req.file
+
+    console.log(file)
+    return res.status(201).json({ caption, fileReceived: Boolean(file) });
+};

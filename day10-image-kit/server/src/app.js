@@ -1,7 +1,12 @@
-import express from 'express'
-import dotenv from 'dotenv';
-dotenv.config()
+import express from "express";
+import dotenv from "dotenv";
+import postRoutes from './routes/post.route.js'
+dotenv.config();
 
 const app = express();
 
-export default app
+app.use(express.json());
+
+app.use('/api/post',postRoutes)
+
+export default app;

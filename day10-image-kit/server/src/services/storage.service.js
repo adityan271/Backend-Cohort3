@@ -11,7 +11,7 @@ export const sendFile = async (file, fileName) => {
   const obj = {
     file,
     fileName,
-    Folder: "cohort-3",
+    Folder: "backend",
   };
   return await storageInstance.upload(obj);
 };
