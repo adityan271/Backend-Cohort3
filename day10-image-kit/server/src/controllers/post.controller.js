@@ -1,5 +1,3 @@
 import postModel from "../models/post.model";
 
-const createPost = async (req,res)=>{
-    
-}
+const createPost = async (req, res) => {};
