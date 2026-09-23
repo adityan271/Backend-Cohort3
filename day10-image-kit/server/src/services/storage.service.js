@@ -1,5 +1,6 @@
-import Imagekit from "@imagekit/nodejs";
-import { Folders } from "@imagekit/nodejs/resources/index.mjs";
+import Imagekit, { toFile } from "@imagekit/nodejs";
+import dotenv from "dotenv";
+dotenv.config();
 
 const storageInstance = new Imagekit({
   urlEndpoint: process.env.IK_URL,
@@ -9,9 +10,9 @@ const storageInstance = new Imagekit({
 
 export const sendFile = async (file, fileName) => {
   const obj = {
-    file,
+    file: await toFile(file, fileName),
     fileName,
-    Folder: "backend",
+    folder: "backend",
   };
-  return await storageInstance.upload(obj);
+  return await storageInstance.files.upload(obj);
 };
