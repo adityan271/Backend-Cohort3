@@ -29,13 +29,12 @@ export const createPost = async (req, res) => {
   }
 };
 
-export const getAllPost = async (req,res) =>{
+export const getAllPost = async (req, res) => {
+  const post = await postModel.find();
 
-    const post = await postModel.find()
-
-    return res.status(200).json({
-        success: true,
-        message: "posts are fetched successfully",
-        post
-    })
-}
+  return res.status(200).json({
+    success: true,
+    message: "posts are fetched successfully",
+    post,
+  });
+};
