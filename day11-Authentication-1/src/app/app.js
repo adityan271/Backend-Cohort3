@@ -10,7 +10,7 @@ app.get("/api", (req, res) => {
     res.status(200).json({ message: "Welcome to the authentication API" });
 });
 
-app.post("/api/register", (req, res) => {
+app.post("/api/auth/register", (req, res) => {
     const { name, email, password } = req.body;
 
     const token = jwt.sign(
