@@ -4,6 +4,6 @@ import dotenv from "dotenv";
 dotenv.config();
 
 export async function connecteDb(paams) {
-  await mongoose.connect(process.env_MONGO_URI);
+  await mongoose.connect(process.env.MONGO_URI);
   console.log("MongoDB connected ");
 }
