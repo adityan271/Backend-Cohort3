@@ -42,7 +42,15 @@ app.post("/api/auth/register", async (req, res) => {
 
 app.get("/api/auth/me", async (req, res) => {
   const authHeader = req.headers.authorization;
-  console.log(authHeader)
+  console.log(authHeader);
+
+  const data = jwt.decode(authHeader);
+
+  console.log(data);
+
+  const user = await userModel.findById(data.id);
+
+  console.log(user);
 });
 
 export default app;
