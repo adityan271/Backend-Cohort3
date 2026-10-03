@@ -4,14 +4,18 @@ import userModel from "../models/user.model.js";
 
 const app = express();
 
-//Middleware - express.json() reads the json data from frontend
-app.use(express.json());
+// Parse JSON sent with the standard JSON or raw text content type.
+app.use(express.json({ type: ["application/json", "text/plain"] }));
 
 app.get("/api", (req, res) => {
   res.status(200).json({ message: "Welcome to the authentication API" });
 });
 
 app.post("/api/auth/register", async (req, res) => {
+  if (!req.body || typeof req.body !== "object") {
+    return res.status(400).json({ message: "Request body must be valid JSON." });
+  }
+
   const { name, email, password } = req.body;
 
   const user = await userModel.create({

@@ -1,6 +1,7 @@
 import postModel from "../models/post.model.js";
 import { sendFile } from "../services/storage.service.js";
 
+// create post 
 export const createPost = async (req, res) => {
   try {
     const { caption } = req.body;
@@ -29,6 +30,7 @@ export const createPost = async (req, res) => {
   }
 };
 
+// get all post
 export const getAllPost = async (req, res) => {
   const post = await postModel.find();
 
