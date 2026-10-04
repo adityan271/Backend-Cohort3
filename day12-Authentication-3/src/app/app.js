@@ -1,25 +1,35 @@
 import express from "express";
 import jwt from "jsonwebtoken";
+import userModel from "../models/user.model.js";
 
 const app = express();
 
 app.use(express.json());
 
-app.get("/auth", (req, res) => {
+app.get("/api", (req, res) => {
   res.status(200).json({
     Message: "welcome to auth",
   });
 });
 
-app.post("/api/auth/register", (req, res) => {
+app.post("/api/auth/register", async (req, res) => {
+  //body se data aata hai yaha
   const { email, name, password } = req.body;
 
+  //save to database
+
+  const user = await userModel.create({
+    name,
+    email,
+    password,
+  });
+
+  // JWt token made
   const token = jwt.sign(
     {
-      name,
-      email,
+      id: user._id,
     },
-    "19ebb264fc4a892a6a4b019bb8b24a2b16fb2c8db6bcda92f7f77fc971d718373f03fa95313813c3aafbc01c820a29111d0c35292f9730837b5e2644bbb1b956",
+    "d06f7c3aebdeb4a96a9c0bbb60fc1d1f4f6b376ea9132bcd2542742067eceed101c3e1b965f0d6eb738fd04e60d77a3e307bf3c4c2f1d1753fe8a6a091ffbd18",
   );
 
   res.status(201).json({
@@ -27,6 +37,7 @@ app.post("/api/auth/register", (req, res) => {
     user: {
       name,
       email,
+      id: user._id,
     },
     token,
   });
