@@ -55,4 +55,37 @@ app.get("/api/auth/me", authenticate, async (req, res) => {
   });
 });
 
-export default app
+app.post("/api/auth/login", async (req, res) => {
+  const { email, password } = req.body;
+
+  const user = await userModel.findOne({
+    email,
+  });
+
+  const isValidPassword = bcrypt.compare(password, user.password);
+
+  if (!isValidPassword) {
+    return res.status(401).json({
+      message: "Invalid email or password",
+    });
+  }
+
+  const token = jwt.sign(
+    {
+      id: user._id,
+    }.process.env.JWT_SECRET,
+  );
+
+  res.status(200).json({
+    message: "User loggedin successfully",
+    data: {
+      user: {
+        email: user.email,
+        name: user.name,
+      },
+    },
+    token,
+  });
+});
+
+export default app;
