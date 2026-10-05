@@ -1,6 +1,7 @@
 import express from "express";
 import jwt from "jsonwebtoken";
 import userModel from "../models/user.model.js";
+import { authentication } from "../middleware/auth.middleware.js";
 
 const app = express();
 
@@ -43,18 +44,14 @@ app.post("/api/auth/register", async (req, res) => {
   });
 });
 
-app.get("/api/auth/me", async (req, res) => {
-  //for auth token send to server
-  const authHeader = req.headers.authorization;
-  console.log(authHeader);
+app.get("/api/auth/me", authentication, async (req, res) => {
+  console.log(req.user);
 
-  //decode token
-  const data = jwt.decode(authHeader);
-  console.log(data);
-
-  //print user on basis of his id
-  const user = await userModel.findById(data.id);
-  console.log(user);
+  res.status(200).json({
+    data: {
+      user: req.user,
+    },
+  });
 });
 
 export default app;
