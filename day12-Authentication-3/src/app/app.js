@@ -43,4 +43,10 @@ app.post("/api/auth/register", async (req, res) => {
   });
 });
 
+app.get("/api/auth/me", (req, res) => {
+  //for auth token send to server
+  const authHeader = req.headers.authorization;
+  console.log(authHeader)
+});
+
 export default app;
