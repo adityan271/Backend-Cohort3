@@ -43,10 +43,18 @@ app.post("/api/auth/register", async (req, res) => {
   });
 });
 
-app.get("/api/auth/me", (req, res) => {
+app.get("/api/auth/me", async (req, res) => {
   //for auth token send to server
   const authHeader = req.headers.authorization;
-  console.log(authHeader)
+  console.log(authHeader);
+
+  //decode token
+  const data = jwt.decode(authHeader);
+  console.log(data);
+
+  //print user on basis of his id
+  const user = await userModel.findById(data.id);
+  console.log(user);
 });
 
 export default app;
