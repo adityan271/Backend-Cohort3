@@ -20,6 +20,10 @@ const userSchema = new mongoose.Schema({
     required: true,
   },
   refreshToken: {
-    type:String
+    type: String,
   },
 });
+
+const userModel = mongoose.model("users", userSchema);
+
+export default userModel;
