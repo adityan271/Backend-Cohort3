@@ -1,7 +1,11 @@
 import { Router } from "express";
 import userModel from "../models/user.model.js";
 import bcrypt from "bcryptjs";
-import { generateTokens, verifyAccessToken } from "../utils/auth.utils.js";
+import {
+  generateTokens,
+  verifyAccessToken,
+  verifyRefreshToken,
+} from "../utils/auth.utils.js";
 
 const router = Router();
 
@@ -77,6 +81,54 @@ router.get("/me", async (req, res) => {
   } catch (error) {
     return res.status(401).json({
       message: "Unauthorized Invalid or expired access token",
+    });
+  }
+});
+
+/**
+ * @POST /api/auth/refresh
+ *
+ */
+
+router.post("/refresh", async (req, res) => {
+  const refreshToken = req.cookies.refreshToken;
+
+  if (!refreshToken) {
+    return res.status(401).json({
+      message: "Unauthorized, refresh token not found",
+    });
+  }
+
+  try {
+    const decode = await verifyRefreshToken(refreshToken);
+
+    const user = await userModel.findById(decoded.id);
+
+    if (refreshToken !== user.refreshToken) {
+      user.refreshToken = null;
+      await user.save();
+
+      return res.status(401).json({
+        message: "Unauthorized, refresh token mismatch",
+      });
+    }
+
+    const { accessToken, refreshToken: newRefreshToken } = generateTokens({
+      userId: user._id,
+    });
+
+    res.cookie("refreshToken", newRefreshToken, { httpOnly: true });
+
+    user.refreshToken = newRefreshToken;
+    await user.save();
+
+    res.status(200).json({
+      message: "Token refresh successfull",
+      accessToken,
+    });
+  } catch (error) {
+    return res.status(401).json({
+      message: "Unauthorized, Invalid or expired refresh token",
     });
   }
 });
