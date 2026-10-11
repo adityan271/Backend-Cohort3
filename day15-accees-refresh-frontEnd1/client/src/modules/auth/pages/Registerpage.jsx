@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { useNavigate } from "react-router";
+import useApi from "../../../shared/api";
 
 const Registerpage = () => {
   const navigate = useNavigate();
+  const api = useApi();
   const [form, setForm] = useState({ name: "", email: "", password: "" });
   const [error, setError] = useState(null);
 
@@ -14,6 +16,15 @@ const Registerpage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(null);
+
+    try {
+      const responce = await api.post("/auth/register", form);
+
+      console.log(responce.data);
+    } catch (error) {
+      setError(error?.message || "Registration failed");
+    }
+
     navigate("/profile");
   };
 
