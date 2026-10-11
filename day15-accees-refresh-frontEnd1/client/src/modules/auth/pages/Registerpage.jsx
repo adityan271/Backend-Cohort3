@@ -1,12 +1,15 @@
 import { useState } from "react";
 import { useNavigate } from "react-router";
+import { useAuth } from "../../../context/UserContext";
 import useApi from "../../../shared/api";
 
 const Registerpage = () => {
   const navigate = useNavigate();
+  const { setUser, setAccessToken } = useAuth();
   const api = useApi();
   const [form, setForm] = useState({ name: "", email: "", password: "" });
   const [error, setError] = useState(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -16,16 +19,22 @@ const Registerpage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(null);
+    setIsSubmitting(true);
 
     try {
-      const responce = await api.post("/auth/register", form);
-
-      console.log(responce.data);
+      const response = await api.post("/auth/register", form);
+      setUser(response.data.data.user);
+      setAccessToken(response.data.accessToken);
+      navigate("/profile");
     } catch (error) {
-      setError(error?.message || "Registration failed");
+      setError(
+        error.response?.data?.message ||
+          error.message ||
+          "Registration failed. Please try again.",
+      );
+    } finally {
+      setIsSubmitting(false);
     }
-
-    navigate("/profile");
   };
 
   return (
@@ -128,9 +137,10 @@ const Registerpage = () => {
 
           <button
             type="submit"
+            disabled={isSubmitting}
             className="group flex w-full items-center justify-center gap-2 rounded-xl bg-emerald-700 px-4 py-3.5 font-semibold text-white shadow-lg shadow-emerald-700/20 transition hover:bg-emerald-800 focus:outline-none focus:ring-4 focus:ring-emerald-500/30"
           >
-            Create account
+            {isSubmitting ? "Creating account..." : "Create account"}
             <span
               aria-hidden="true"
               className="transition-transform group-hover:translate-x-1"
