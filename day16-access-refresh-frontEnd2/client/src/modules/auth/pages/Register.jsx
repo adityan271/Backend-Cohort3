@@ -24,11 +24,13 @@ const Register = () => {
         password,
       });
 
+      console.log(response.data)
+
       authContext.setAccessToken(response.data.accessToken);
       authContext.setUser(response.data.data.user);
       navigate("/profile");
 
-      
+
     } catch (error) {
       setErrorMessage(
         error?.response?.data?.message ??

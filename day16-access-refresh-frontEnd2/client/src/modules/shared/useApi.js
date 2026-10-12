@@ -14,5 +14,16 @@ export default function useApi() {
     return config;
   });
 
+  api.interceptors.response.use(async (config) => {
+    if (config.status === 401) {
+      const res = await api.post("/auth/refresh");
+      authContext.setAccessToken(res.data.accessToken);
+
+      config.headers.Authorization = `Bearer ${res.data.accessToken}`;
+
+      return api(config);
+    }
+  });
+
   return api;
 }
