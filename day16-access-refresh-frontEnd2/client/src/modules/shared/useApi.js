@@ -14,16 +14,20 @@ export default function useApi() {
     return config;
   });
 
-  api.interceptors.response.use(async (config) => {
-    if (config.status === 401) {
-      const res = await api.post("/auth/refresh");
-      authContext.setAccessToken(res.data.accessToken);
-
-      config.headers.Authorization = `Bearer ${res.data.accessToken}`;
-
-      return api(config);
-    }
-  });
+  api.interceptors.response.use(
+    (response) => response,
+    async (error) => {
+      if (error.response && error.response.status === 401) {
+        console.log("Unauthorized, neet refresh token");
+        const res = await axios.post("/api/auth/refresh");
+        console.log("Refreshing access token");
+        authContext.setAccessToken(res.data.accessToken);
+        error.config.headers.Authorization = `Bearer ${res.data.accessToken}`;
+        return axios(error.config);
+      }
+      return Promise.reject(error);
+    },
+  );
 
   return api;
 }
