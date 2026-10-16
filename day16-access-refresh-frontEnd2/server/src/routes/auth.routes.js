@@ -33,7 +33,9 @@ router.post("/register", async (req, res) => {
     const normalizedEmail = email.trim().toLowerCase();
     const existingUser = await userModel.findOne({ email: normalizedEmail });
     if (existingUser) {
-      return res.status(409).json({ message: "An account with this email already exists." });
+      return res
+        .status(409)
+        .json({ message: "An account with this email already exists." });
     }
 
     const user = await userModel.create({
